@@ -1,0 +1,16 @@
+[Unit]
+Description=Bouncer network setup (Wi-Fi setup hotspot if there is no network)
+After=NetworkManager.service
+Wants=NetworkManager.service
+Before=bouncer.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+Environment=PYTHONPATH=/opt/bouncer/current PYTHONDONTWRITEBYTECODE=1
+WorkingDirectory=/opt/bouncer/current
+ExecStart=/usr/bin/python3 -m bouncer netsetup
+TimeoutStartSec=infinity
+
+[Install]
+WantedBy=multi-user.target

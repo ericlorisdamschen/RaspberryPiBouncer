@@ -1,0 +1,22 @@
+[Unit]
+Description=Bouncer (ad, tracker and scam blocker)
+After=network.target NetworkManager.service bouncer-netsetup.service
+Wants=NetworkManager.service
+
+[Service]
+Type=simple
+Environment=PYTHONPATH=/opt/bouncer/current PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
+WorkingDirectory=/opt/bouncer/current
+ExecStart=/usr/bin/python3 -m bouncer run
+Restart=always
+RestartSec=3
+Nice=-5
+# Hardening: the system is read-only for Bouncer except where it must write.
+ProtectSystem=full
+ReadWritePaths=/var/lib/bouncer -/etc/dnsmasq.d -/boot/firmware
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,11 @@
+[Unit]
+Description=Bouncer software update (signed releases from GitHub)
+After=network-online.target bouncer.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+Environment=PYTHONPATH=/opt/bouncer/current PYTHONDONTWRITEBYTECODE=1
+WorkingDirectory=/opt/bouncer
+ExecStart=/usr/bin/python3 -m bouncer update
+TimeoutStartSec=15min
