@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Bouncer</title>
+<link rel="icon" href="/static/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/app.css">
+<script src="/static/app.js" defer></script>
+</head>
+<body>
+
+<!-- ============ PIN screen ============ -->
+<section id="screen-login" class="auth hidden" aria-labelledby="login-title">
+  <div class="auth-inner">
+    <div class="auth-top"><div class="seg lang-switch" aria-label="Language"></div></div>
+    <div class="logo lg" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.8-7 9-4-1.2-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+    <h1 id="login-title" data-i18n="login.title"></h1>
+    <div id="login-dots" class="dots" role="status" aria-live="polite"><span></span><span></span><span></span><span></span></div>
+    <div id="login-msg" class="msg" role="alert"></div>
+    <div class="keypad" id="keypad"></div>
+    <p class="muted" data-i18n="login.lock_info"></p>
+    <button type="button" class="btn link" id="btn-forgot" data-i18n="login.forgot"></button>
+  </div>
+</section>
+
+<!-- ============ Choose a PIN (first start / first login) ============ -->
+<section id="screen-setpin" class="auth hidden" aria-labelledby="setpin-title">
+  <div class="auth-inner">
+    <div class="auth-top"><div class="seg lang-switch" aria-label="Language"></div></div>
+    <p class="okline" data-i18n="setpin.welcome"></p>
+    <h1 id="setpin-title" data-i18n="setpin.title"></h1>
+    <p data-i18n="setpin.text"></p>
+    <form class="form" id="form-setpin" autocomplete="off">
+      <label for="np1" data-i18n="setpin.new"></label>
+      <input id="np1" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required>
+      <label for="np2" data-i18n="setpin.repeat"></label>
+      <input id="np2" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required>
+      <div id="setpin-msg" class="msg" role="alert"></div>
+      <button type="submit" class="btn primary big" data-i18n="setpin.save"></button>
+    </form>
+  </div>
+</section>
+
+<!-- ============ Forgot PIN: recovery code ============ -->
+<section id="screen-recover" class="auth hidden" aria-labelledby="recover-title">
+  <div class="auth-inner">
+    <div class="auth-top"><div class="seg lang-switch" aria-label="Language"></div></div>
+    <h1 id="recover-title" data-i18n="recover.title"></h1>
+    <p data-i18n="recover.text"></p>
+    <form class="form" id="form-recover" autocomplete="off">
+      <label for="rc" data-i18n="recover.code"></label>
+      <input id="rc" class="code" placeholder="XXXX-XXXX-XXXX" maxlength="14" required>
+      <label for="rp1" data-i18n="setpin.new"></label>
+      <input id="rp1" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required>
+      <label for="rp2" data-i18n="setpin.repeat"></label>
+      <input id="rp2" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required>
+      <div id="recover-msg" class="msg" role="alert"></div>
+      <button type="submit" class="btn primary big" data-i18n="recover.button"></button>
+    </form>
+    <p class="muted" data-i18n="recover.lost"></p>
+    <button type="button" class="btn link" id="btn-back-login" data-i18n="recover.back"></button>
+  </div>
+</section>
+
+<!-- ============ Recovery code shown once ============ -->
+<section id="screen-code" class="auth hidden" aria-labelledby="code-title">
+  <div class="auth-inner">
+    <h1 id="code-title" data-i18n="code.title"></h1>
+    <p data-i18n="code.text"></p>
+    <div class="recovery-code" id="recovery-code"></div>
+    <a class="btn primary big" id="mail-code" href="#" data-i18n="code.email"></a>
+    <p class="muted" data-i18n="code.email_note"></p>
+    <button type="button" class="btn ok big" id="btn-code-done" data-i18n="code.done"></button>
+  </div>
+</section>
+
+<!-- ============ Dashboard ============ -->
+<div id="screen-dash" class="hidden">
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="logo" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.8-7 9-4-1.2-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+      <div><div class="brand-name">Bouncer</div><div class="muted" id="brand-sub"></div></div>
+    </div>
+    <div class="tools">
+      <div class="seg lang-switch" aria-label="Language"></div>
+      <button type="button" class="btn icon-btn" id="btn-theme" data-i18n-aria="theme.toggle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></button>
+      <button type="button" class="btn" id="btn-lock"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span data-i18n="lock"></span></button>
+    </div>
+  </header>
+
+  <section id="status" class="card status on" aria-live="polite"></section>
+  <section id="network-notice" class="notice hidden" aria-live="polite"></section>
+
+  <section class="numbers" aria-label="Today">
+    <div class="card stat"><span class="label" data-i18n="num.blocked"></span><span class="value blocked num" id="n-blocked">–</span><span class="muted" data-i18n="num.blocked_hint"></span></div>
+    <div class="card stat"><span class="label" data-i18n="num.share"></span><span class="value num" id="n-share">–</span><span class="muted" id="n-share-hint"></span></div>
+    <div class="card stat"><span class="label" data-i18n="num.total"></span><span class="value num" id="n-total">–</span><span class="muted" data-i18n="num.total_hint"></span></div>
+    <div class="card stat"><span class="label" data-i18n="num.saved"></span><span class="value num" id="n-saved">–</span><span class="muted" data-i18n="num.saved_hint"></span></div>
+  </section>
+
+  <section class="card" aria-labelledby="prot-title">
+    <h2 id="prot-title" data-i18n="prot.title"></h2>
+    <div id="shields"></div>
+  </section>
+
+  <div class="row">
+    <section class="card grow" aria-labelledby="chart-title">
+      <div class="card-head">
+        <h2 id="chart-title"></h2>
+        <div class="seg square" id="chart-range"><button type="button" data-range="hours" aria-pressed="true" data-i18n="chart.24h"></button><button type="button" data-range="days" aria-pressed="false" data-i18n="chart.7d"></button></div>
+      </div>
+      <div class="legend"><span><i class="sw b"></i><span data-i18n="chart.blocked"></span></span><span><i class="sw a"></i><span data-i18n="chart.allowed"></span></span></div>
+      <div class="bars" id="bars" role="img"></div>
+      <div class="axis" id="axis"></div>
+    </section>
+    <section class="card side" aria-labelledby="speed-title">
+      <h2 id="speed-title" data-i18n="speed.title"></h2>
+      <div id="speed-body"></div>
+      <button type="button" class="btn primary big" id="btn-speed" data-i18n="speed.run"></button>
+      <p class="muted" id="speed-note"></p>
+    </section>
+  </div>
+
+  <div class="row">
+    <section class="card grow" aria-labelledby="dev-title">
+      <h2 id="dev-title" data-i18n="dev.title"></h2>
+      <p class="muted" data-i18n="dev.hint"></p>
+      <div id="devices"></div>
+    </section>
+    <section class="card side" aria-labelledby="fix-title">
+      <h2 id="fix-title" data-i18n="fix.title"></h2>
+      <p class="muted" data-i18n="fix.text"></p>
+      <ol class="muted steps">
+        <li data-i18n="fix.step1"></li><li data-i18n="fix.step2"></li>
+      </ol>
+      <div class="fix">
+        <label for="fix-device" class="sr" data-i18n="fix.device"></label>
+        <select id="fix-device"></select>
+        <button type="button" class="btn primary" id="btn-fix" data-i18n="fix.button"></button>
+      </div>
+      <div class="result" id="fix-result" role="status"></div>
+    </section>
+  </div>
+
+  <section class="card" aria-labelledby="recent-title">
+    <h2 id="recent-title" data-i18n="recent.title"></h2>
+    <p class="muted" data-i18n="recent.hint"></p>
+    <div id="recent"></div>
+  </section>
+
+  <section class="sys" aria-label="System">
+    <div class="card"><strong data-i18n="sys.software"></strong><span id="sys-software"></span><span class="muted" data-i18n="sys.software_hint"></span></div>
+    <div class="card"><strong data-i18n="sys.lists"></strong><span id="sys-lists"></span><span class="muted" id="sys-lists-hint"></span></div>
+    <div class="card"><strong data-i18n="sys.backup"></strong>
+      <a class="btn" href="/api/backup" download><span data-i18n="sys.save_backup"></span></a>
+      <label class="btn" for="restore-file" tabindex="0" id="restore-label"><span data-i18n="sys.restore"></span></label>
+      <input type="file" id="restore-file" accept="application/json,.json" class="sr">
+    </div>
+    <div class="card"><strong data-i18n="sys.help"></strong>
+      <a class="btn" id="guide-link" href="/static/guides/bouncer-router-guide-en.pdf" download><span data-i18n="sys.guide"></span></a>
+      <a class="btn" href="/api/diagnostics" download><span data-i18n="sys.diag"></span></a>
+      <button type="button" class="btn link" id="btn-faq" data-i18n="sys.faq"></button>
+    </div>
+  </section>
+
+  <details class="card adv" id="advanced">
+    <summary data-i18n="adv.title"></summary>
+    <div class="adv-section">
+      <h3 data-i18n="adv.router"></h3>
+      <p class="muted" data-i18n="adv.router_text"></p>
+      <div id="adv-addresses" class="mono"></div>
+    </div>
+    <div class="adv-section">
+      <h3 data-i18n="adv.am_title"></h3>
+      <p class="muted" data-i18n="adv.am_text"></p>
+      <p id="am-state"></p>
+      <div><button type="button" class="btn" id="btn-am"></button></div>
+      <div class="result" id="am-result" role="status"></div>
+    </div>
+    <div class="adv-section">
+      <h3 data-i18n="adv.rules"></h3>
+      <p class="muted" data-i18n="adv.rules_text"></p>
+      <form class="inline-form" id="form-rule">
+        <label for="rule-domain" class="sr" data-i18n="adv.domain"></label>
+        <input id="rule-domain" placeholder="example.com" autocomplete="off">
+        <button type="submit" class="btn" data-list="allow" data-i18n="adv.allow"></button>
+        <button type="submit" class="btn" data-list="block" data-i18n="adv.block"></button>
+      </form>
+      <div class="rules" id="rules"></div>
+      <div><button type="button" class="btn" id="btn-reset-fixes"></button></div>
+    </div>
+    <div class="adv-section">
+      <h3 data-i18n="adv.security"></h3>
+      <div class="inline-form">
+        <button type="button" class="btn" id="btn-change-pin" data-i18n="adv.change_pin"></button>
+        <button type="button" class="btn" id="btn-new-code" data-i18n="adv.new_code"></button>
+      </div>
+    </div>
+    <div class="adv-section">
+      <h3 data-i18n="adv.maintenance"></h3>
+      <div class="inline-form">
+        <button type="button" class="btn" id="btn-update-lists" data-i18n="adv.update_lists"></button>
+        <button type="button" class="btn" id="btn-clear-history" data-i18n="adv.clear_history"></button>
+      </div>
+      <p class="muted" id="adv-upstream"></p>
+    </div>
+  </details>
+</div>
+</div>
+
+<dialog id="dlg-rename"><form method="dialog"><h2 data-i18n="dev.rename"></h2><label for="rename-input" data-i18n="dev.new_name"></label><input id="rename-input" maxlength="40"><div class="btns"><button value="cancel" class="btn" data-i18n="cancel"></button><button value="ok" class="btn primary" data-i18n="save"></button></div></form></dialog>
+<dialog id="dlg-pin"><form method="dialog" id="form-change-pin"><h2 data-i18n="adv.change_pin"></h2><label for="cp-old" data-i18n="pin.current"></label><input id="cp-old" type="password" inputmode="numeric" maxlength="4"><label for="cp-new" data-i18n="setpin.new"></label><input id="cp-new" type="password" inputmode="numeric" maxlength="4"><div id="cp-msg" class="result bad" role="alert"></div><div class="btns"><button value="cancel" class="btn" formnovalidate data-i18n="cancel"></button><button value="ok" class="btn primary" data-i18n="save"></button></div></form></dialog>
+<dialog id="dlg-faq"><form method="dialog"><h2 data-i18n="faq.title"></h2><p data-i18n="faq.youtube"></p><p data-i18n="faq.apps"></p><p data-i18n="faq.guest"></p><div class="btns"><button value="ok" class="btn primary" data-i18n="ok"></button></div></form></dialog>
+<dialog id="dlg-confirm"><form method="dialog"><h2 id="confirm-title"></h2><p id="confirm-text"></p><div class="btns"><button value="cancel" class="btn" data-i18n="cancel"></button><button value="ok" class="btn primary" id="confirm-ok"></button></div></form></dialog>
+<div id="toast" class="toast hidden" role="status"></div>
+</body>
+</html>
