@@ -61,7 +61,7 @@ jobs:
           pi-gen-release: Bouncer
           hostname: bouncer
           locale: en_GB.UTF-8
-          timezone: Europe/Luxembourg
+          timezone: Europe/Brussels
           keyboard-keymap: us
           keyboard-layout: English (US)
           username: bouncer
