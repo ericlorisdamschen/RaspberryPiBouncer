@@ -1,0 +1,4 @@
+# Used only in Bouncer's address mode (DHCP only, DNS is done by Bouncer).
+ENABLED=1
+IGNORE_RESOLVCONF=yes
+DNSMASQ_EXCEPT="lo"
