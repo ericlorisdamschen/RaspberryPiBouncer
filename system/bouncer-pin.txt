@@ -1,0 +1,11 @@
+BOUNCER - FIRST PIN
+===================
+Write the household's first 4-digit PIN after "PIN=" below, save this file,
+then put the SD card into the Raspberry Pi. Bouncer reads the PIN once at its
+first start and then removes it from this file. The household must replace it
+with their own PIN at their first login.
+
+DE: Tragen Sie die erste 4-stellige PIN hinter "PIN=" ein und speichern Sie.
+FR: Inscrivez le premier code PIN à 4 chiffres après "PIN=" et enregistrez.
+
+PIN=
