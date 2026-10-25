@@ -1,0 +1,9 @@
+python3
+python3-aiohttp
+python3-dnslib
+python3-cryptography
+dnsmasq
+ndisc6
+rfkill
+avahi-daemon
+unattended-upgrades
