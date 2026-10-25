@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+dist/
+build-state/
+image/stage-bouncer/00-bouncer/files/
+*.pem
+*signing-key*
+.pytest_cache/
