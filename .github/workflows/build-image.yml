@@ -31,6 +31,9 @@ jobs:
       - name: Prepare Bouncer files for the image
         run: |
           pip install aiohttp dnslib
+          # Uploads through the GitHub website lose the "executable" mark;
+          # the image builder skips scripts without it.
+          chmod +x image/stage-bouncer/prerun.sh image/stage-bouncer/00-bouncer/*.sh
           F=image/stage-bouncer/00-bouncer/files
           mkdir -p "$F/app" "$F/lists"
           cp -r bouncer VERSION "$F/app/"
